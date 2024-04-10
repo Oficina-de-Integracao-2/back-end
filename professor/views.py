@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from .serializers import ProfessorSerializer
+from rest_framework import generics
+from .models import Professor
 
-# Create your views here.
+
+class ProfessorView(generics.ListCreateAPIView):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
