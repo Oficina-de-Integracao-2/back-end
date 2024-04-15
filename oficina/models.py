@@ -5,7 +5,7 @@ class Oficina(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(null=True)
 
-    fk = models.ForeignKey(
+    professor = models.ForeignKey(
         "professor.Professor",
         on_delete=models.CASCADE,
         related_name="oficinas"
