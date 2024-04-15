@@ -29,7 +29,44 @@ Propomos a implementação de um sistema de gestão de presença em tempo real, 
 | RF08   | Geração de certificados para os alunos presentes|
 | RF09   | Editar registros de presença                    |
 
-# Arquiteura do projeto
+## Arquiteura do projeto
 
 ![Arquitetura do Projeto](/arquitetura.png)
 
+## Configuração Inicial
+
+Recomendamos a utilização de um ambiente virtual para instalar e executar este projeto:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # No Windows use `venv\Scripts\activate`
+```
+
+Instale todas as dependências do projeto com o seguinte comando:
+
+```bash
+pip install -r requirements.txt
+```
+
+Configure seu banco de dados no arquivo .env e ajuste as variáveis de ambiente conforme necessário.
+
+Execute as migrações necessárias com:
+
+```bash
+python manage.py migrate
+```
+
+Inicie o servidor de desenvolvimento com:
+```bash
+python manage.py runserver
+```
+
+## Executando Testes
+
+Para executar os testes, use o comando pytest no terminal:
+
+```bash
+pytest
+```
+
+pytest irá automaticamente encontrar e executar todos os testes no projeto que correspondam aos padrões de nomeação especificados.
