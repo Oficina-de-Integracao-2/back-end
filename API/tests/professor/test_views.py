@@ -98,3 +98,33 @@ def test_login_failure(client):
     }
     response = client.post(url, login_data)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED, "O status de resposta deveria ser 401 UNAUTHORIZED para credenciais incorretas."
+
+
+@pytest.mark.django_db
+def test_login_failure_with_wrong_password(client, professor):
+    """Verifica o login com senha incorreta."""
+    url = reverse('token_obtain_pair')
+    login_data = {
+        'username': 'professor1',
+        'password': 'wrongpassword'
+    }
+    response = client.post(url, login_data)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED, "Deveria retornar 401 UNAUTHORIZED para senha incorreta."
+
+
+@pytest.mark.django_db
+def test_create_professor_with_invalid_data(client):
+    """Testa a criação de um professor com dados inválidos."""
+    url = reverse('professor-list')
+    invalid_professor_data = {
+        'username': 'professor3',
+        'email': 'invalid-email',
+        'cpf': '1234567890',
+        'first_name': 'Invalid',
+        'last_name': 'Professor',
+        'password': 'pass'
+    }
+    response = client.post(url, invalid_professor_data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, "Deveria retornar 400 BAD REQUEST para dados inválidos."
+    assert 'email' in response.data, "Deveria retornar erro para o email inválido."
+    assert 'cpf' in response.data, "Deveria retornar erro para o CPF inválido."
