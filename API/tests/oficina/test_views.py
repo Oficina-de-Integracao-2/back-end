@@ -31,3 +31,17 @@ def test_oficina_view():
     })
     assert response.status_code == 201, "Usuário autenticado deve poder criar uma oficina."
     assert response.data['professor']['id'] == professor.id, "O professor criador deve ser registrado corretamente na oficina criada."
+
+    client.credentials()
+    response = client.get(url)
+    assert response.status_code == 401, "Usuário não autenticado não deve poder listar oficinas."
+
+    response = client.post(url, {
+        'title': 'Oficina sem Autenticação',
+        'description': 'Deve falhar.'
+    })
+    assert response.status_code == 401, "Usuário não autenticado não deve poder criar uma oficina."
+
+    client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+    response = client.post(url, {})
+    assert response.status_code == 400, "Deve falhar se os dados obrigatórios não forem fornecidos."

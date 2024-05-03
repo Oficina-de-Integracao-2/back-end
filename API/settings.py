@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import dotenv
 from datetime import timedelta
+from datetime import timedelta
 
 dotenv.load_dotenv()
 
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "professor",
-    "oficina"
+    "oficina",
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = "API.urls"
@@ -77,6 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "API.wsgi.application"
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
