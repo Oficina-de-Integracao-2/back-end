@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.core.exceptions import ValidationError
 from professor.models import Professor
+import re
+
 
 class ProfessorSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
@@ -33,6 +34,16 @@ class ProfessorSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+    def validate_first_name(self, value):
+        if not re.match("^[A-Za-z]+$", value):
+            raise serializers.ValidationError("First name must contain only letters.")
+        return value
+
+    def validate_last_name(self, value):
+        if not re.match("^[A-Za-z]+$", value):
+            raise serializers.ValidationError("Last name must contain only letters.")
+        return value
 
     def validate_cpf(self, value):
         if len(value) != 11 or not value.isdigit():
