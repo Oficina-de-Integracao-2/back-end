@@ -8,4 +8,8 @@ class OficinaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Oficina
-        fields = ["id", "title", "description", "professor"]
+        fields = [
+            "id", "title", "description", "workload",
+            "city_of_realization", "creation_date", "date_of_realization",
+            "time_of_realization", "realized", "professor"
+        ]
