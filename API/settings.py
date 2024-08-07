@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "professor",
-    "oficina"
+    "oficina",
+    "aluno",
+    "presenca"
 ]
 
 CORS_ALLOWED_ORIGINS = [
