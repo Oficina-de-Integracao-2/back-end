@@ -23,3 +23,13 @@ class OficinaDetailView(generics.RetrieveUpdateAPIView):
 
     queryset = Oficina.objects.all()
     serializer_class = OficinaSerializer
+
+
+class OficinasPorProfessorView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminOrProfessorOwner]
+    serializer_class = OficinaSerializer
+
+    def get_queryset(self):
+        professor_id = self.kwargs['professor_id']
+        return Oficina.objects.filter(professor_id=professor_id)
