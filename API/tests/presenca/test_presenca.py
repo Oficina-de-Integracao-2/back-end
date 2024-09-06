@@ -111,3 +111,61 @@ def test_create_presenca_with_invalid_oficina(authenticated_client, aluno):
     response = authenticated_client.post(reverse('presenca-list-create'), data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "oficina" in response.data
+
+
+@pytest.mark.django_db
+def test_update_presenca(authenticated_client, aluno, oficina):
+    presenca = Presenca.objects.create(aluno=aluno, oficina=oficina, presente=False)
+    
+    data = {
+        "aluno": aluno.id,
+        "oficina": oficina.id,
+        "presente": True
+    }
+    response = authenticated_client.post(reverse('presenca-list-create'), data)
+    
+    assert response.status_code == status.HTTP_200_OK
+    presenca.refresh_from_db()
+    assert presenca.presente is True
+    assert Presenca.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_presenca_unique_constraint(authenticated_client, aluno, oficina):
+
+    Presenca.objects.create(aluno=aluno, oficina=oficina, presente=True)
+
+    data = {
+        "aluno": aluno.id,
+        "oficina": oficina.id,
+        "presente": True
+    }
+    response = authenticated_client.post(reverse('presenca-list-create'), data)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert Presenca.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_unmark_presenca(authenticated_client, aluno, oficina):
+
+    presenca = Presenca.objects.create(aluno=aluno, oficina=oficina, presente=True)
+
+    url = reverse('unmark-presenca', args=[aluno.id, oficina.id])
+    response = authenticated_client.post(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    presenca.refresh_from_db()
+    assert presenca.presente is False
+
+
+@pytest.mark.django_db
+def test_generate_certificate_without_presence(authenticated_client, aluno, oficina):
+
+    Presenca.objects.create(aluno=aluno, oficina=oficina, presente=False)
+
+    url = reverse('generate-certificate', args=[aluno.id, oficina.id])
+    response = authenticated_client.get(url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.content.decode() == "Certificado não disponível. Presença não registrada."
