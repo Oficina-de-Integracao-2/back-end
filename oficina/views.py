@@ -17,7 +17,7 @@ class OficinaView(generics.ListCreateAPIView):
         serializer.save(professor=self.request.user)
 
 
-class OficinaDetailView(generics.RetrieveUpdateAPIView):
+class OficinaDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsAdminOrProfessorOwner]
 
