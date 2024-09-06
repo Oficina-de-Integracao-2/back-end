@@ -21,9 +21,21 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Frame, Spacer
 class PresencaListCreate(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    
     queryset = Presenca.objects.all()
     serializer_class = PresencaSerializer
+
+    def create(self, request, *args, **kwargs):
+        aluno_id = request.data.get('aluno')
+        oficina_id = request.data.get('oficina')
+
+        try:
+            presenca = Presenca.objects.get(aluno_id=aluno_id, oficina_id=oficina_id)
+            presenca.presente = True
+            presenca.save()
+            return Response({"message": "Presença atualizada com sucesso."}, status=status.HTTP_200_OK)
+        except Presenca.DoesNotExist:
+            return super().create(request, *args, **kwargs)
 
 
 class PresencaListByOficina(APIView):
